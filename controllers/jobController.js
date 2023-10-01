@@ -72,7 +72,7 @@ export const getAllJobs = asyncHandler(async (req, res) => {
   const numOfPages = Math.ceil(totalJobs / limit);
   res.status(StatusCodes.OK).json({
     success: true,
-    message: { jobs, totalJobs, numOfPages, currentPage: page },
+    message: { jobs, totalJobs, numOfPages, currentPage: page, limit },
   });
 });
 

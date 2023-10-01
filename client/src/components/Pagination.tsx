@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 function Pagination() {
   const { data, onSetParams } = useAllJobs();
   const {
-    message: { currentPage, numOfPages, totalJobs },
+    message: { currentPage, limit, numOfPages, totalJobs },
   } = data.data;
 
   function handlePageChange(page: number) {
@@ -79,9 +79,8 @@ function Pagination() {
     return pageButtons;
   }
 
-  const firstPageLimit =
-    (totalJobs / numOfPages) * currentPage - totalJobs / numOfPages + 1;
-  const lastPageLimit = (totalJobs / numOfPages) * currentPage;
+  const firstPageLimit = limit * (currentPage - 1) + 1;
+  const lastPageLimit = limit * currentPage;
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
