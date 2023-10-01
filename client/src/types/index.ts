@@ -39,6 +39,7 @@ export interface IJobs {
   totalPages: number;
   numOfPages: number;
   currentPage: number;
+  limit: number;
 }
 
 export interface IJob {
