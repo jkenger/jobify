@@ -1,4 +1,4 @@
-![image](https://github.com/jkenger/jobify/assets/73566770/ecb71f32-7fed-41a9-9d67-c4a0a93b5ea7)![Banner](https://github.com/jkenger/jobify/blob/main/public/images/banner.png?raw=true)
+![Banner](https://github.com/jkenger/jobify/blob/main/public/images/banner.png?raw=true)
 
 # Jobify: Personal Job Tracker (https://jobify-rl4k.onrender.com/)
 
