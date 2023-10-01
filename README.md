@@ -1,6 +1,6 @@
 ![Banner](https://github.com/jkenger/jobify/blob/main/public/images/banner.png?raw=true)
 
-# Jobify: Personal Job Tracker (https://jobify-rl4k.onrender.com/)
+# Jobify: Personal Job Tracker
 
 ## Overview
 
