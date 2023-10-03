@@ -13,6 +13,7 @@ import {
   JobStatus,
   JobType,
   Links,
+  QueryKeys,
 } from "@/types";
 import fetch from "@/utils/fetch";
 import {
@@ -21,42 +22,40 @@ import {
   useOutletContext,
   redirect,
 } from "react-router-dom";
-import { ToastAction } from "@/components/ui/toast";
+import { QueryClient } from "@tanstack/react-query";
 
-export const action = async ({ request }: { request: Request }) => {
-  const formData = await request.formData();
+export const action =
+  (queryClient: QueryClient) =>
+  async ({ request }: { request: Request }) => {
+    const formData = await request.formData();
 
-  const data = Object.fromEntries(formData.entries());
-  if (!data.company || !data.position) {
-    toast({
-      title: "Error",
-      description: "Please fill in all the required fields.",
-      variant: "destructive",
-    });
-    return null;
-  }
-  try {
-    await fetch.post("/jobs", data);
-    toast({
-      title: "Job added",
-      description: "Your job has been added to the listings.",
-      action: (
-        <ToastAction altText="View Jobs" onClick={() => redirect(Links.JOBS)}>
-          View Jobs
-        </ToastAction>
-      ),
-    });
-    return data;
-  } catch (err) {
-    const error = err as CatchError;
-    toast({
-      title: "Error",
-      description: error.response.data.msg,
-      variant: "destructive",
-    });
-    return error;
-  }
-};
+    const data = Object.fromEntries(formData.entries());
+    if (!data.company || !data.position) {
+      toast({
+        title: "Error",
+        description: "Please fill in all the required fields.",
+        variant: "destructive",
+      });
+      return null;
+    }
+    try {
+      await fetch.post("/jobs", data);
+      queryClient.invalidateQueries([QueryKeys.JOBS]);
+      toast({
+        title: "Job added",
+        description: "Your job has been added to the listings.",
+      });
+      return redirect(Links.JOBS);
+    } catch (err) {
+      const error = err as CatchError;
+      toast({
+        title: "Error",
+        description: error.response.data.msg,
+        variant: "destructive",
+      });
+      return error;
+    }
+  };
 
 function AddJob() {
   const { user } = useOutletContext() as DashboardContextType;

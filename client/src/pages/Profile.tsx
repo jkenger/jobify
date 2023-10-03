@@ -8,39 +8,44 @@ import {
   SpaceRow,
   toast,
 } from "@/components/ui";
-import { CatchError, DashboardContextType, IAction } from "@/types";
+import { CatchError, DashboardContextType, IAction, QueryKeys } from "@/types";
 import fetch from "@/utils/fetch";
+import { QueryClient } from "@tanstack/react-query";
 
 import { Form, useNavigation, useOutletContext } from "react-router-dom";
 
-export async function action({ request }: IAction) {
-  const formData = await request.formData();
-  const file = formData.get("avatar") as File;
-  if (file && file.size > 500000) {
-    toast({
-      title: "Error",
-      description: "File is too large",
-    });
+export const action =
+  (queryClient: QueryClient) =>
+  async ({ request }: IAction) => {
+    const formData = await request.formData();
+    const file = formData.get("avatar") as File;
+    if (file && file.size > 500000) {
+      toast({
+        title: "Error",
+        description: "File is too large",
+      });
+      return null;
+    }
+
+    try {
+      await fetch.patch("/users/update-user", formData);
+
+      toast({
+        title: "Success",
+        description: "Profile updated",
+      });
+      queryClient.invalidateQueries([QueryKeys.USER]);
+    } catch (err) {
+      const error = err as CatchError;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.msg,
+      });
+    }
+
     return null;
-  }
-
-  try {
-    await fetch.patch("/users/update-user", formData);
-    toast({
-      title: "Success",
-      description: "Profile updated",
-    });
-  } catch (err) {
-    const error = err as CatchError;
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: error.response.data.msg,
-    });
-  }
-
-  return null;
-}
+  };
 
 function Profile() {
   const { user } = useOutletContext<DashboardContextType>();

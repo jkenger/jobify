@@ -128,3 +128,11 @@ export enum UserRole {
   ADMIN = "admin",
   USER = "user",
 }
+
+export enum QueryKeys {
+  JOB = "job",
+  JOBS = "alljobs",
+  USER = "user",
+  STATS = "stats",
+  ADMIN = "admin",
+}

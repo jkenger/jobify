@@ -1,29 +1,50 @@
 import Wrapper from "@/components/wrappers/Dashboard";
 import Navbar from "@/components/Navbar";
 import { useState, createContext, useContext } from "react";
-import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { Outlet, redirect, useNavigate } from "react-router-dom";
 import { BigSidebar, SmallSidebar } from "@/components";
-import { CurrentUser, DashboardContextType, ILoader } from "@/types";
+import {
+  CatchError,
+  CurrentUser,
+  DashboardContextType,
+  ILoader,
+  QueryKeys,
+} from "@/types";
 import fetch from "@/utils/fetch";
 import { toast } from "@/components/ui/use-toast";
+import { QueryClient, UseQueryResult, useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 
 const DashboardContext = createContext({});
 
-export async function loader(): Promise<ILoader<CurrentUser> | Response> {
-  try {
-    const { data } = await fetch.get("/users/current-user");
-    return {
-      data,
-    };
-  } catch (error) {
-    return redirect("/login");
-  }
-}
+const userQuery = () => {
+  return {
+    queryKey: [QueryKeys.USER],
+    queryFn: async () => {
+      try {
+        return await fetch.get("/users/current-user");
+      } catch (error) {
+        const err = error as CatchError;
+        return err.response.data.msg;
+      }
+    },
+  };
+};
+
+export const loader =
+  (queryClient: QueryClient) =>
+  async (): Promise<ILoader<CurrentUser> | Response> => {
+    try {
+      return await queryClient.ensureQueryData(userQuery());
+    } catch (error) {
+      return redirect("/login");
+    }
+  };
 
 function DashboardLayout() {
-  const { data } = useLoaderData() as ILoader<CurrentUser>;
-  const user = data.message;
+  const { data } = useQuery(userQuery()) as UseQueryResult<AxiosResponse>;
 
+  const user = data?.data.message;
   const navigate = useNavigate();
 
   const [showSidebar, setShowSidebar] = useState(false);

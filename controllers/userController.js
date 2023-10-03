@@ -5,6 +5,7 @@ import Job from "../models/JobModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { BadRequestError } from "../errors/customErrors.js";
+import { formatImage } from "../middleware/upload.js";
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
   console.log(req.user);
@@ -30,11 +31,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   // Check if file is sent
   if (req.file) {
-    const response = await cloudinary.uploader.upload(req.file.path);
-    console.log(response);
-    fs.unlink(req.file.path, (err) => {
-      if (err) throw new BadRequestError("Failed deleting internal file");
-    });
+    const file = formatImage(req.file);
+    const response = await cloudinary.uploader.upload(file);
+
     req.body.avatar = response.secure_url;
     req.body.avatarPublicId = response.public_id;
   }

@@ -3,7 +3,7 @@ function StatCard({
   value = "3",
 }: {
   labelText: string;
-  value: string | number;
+  value: number | string | undefined | null;
 }) {
   return (
     <div className=" h-24  w-full px-4 py-3 flex flex-col justify-center ">

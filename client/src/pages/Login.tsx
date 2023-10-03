@@ -10,8 +10,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { CatchError, Links } from "@/types";
+import { CatchError, Links, QueryKeys } from "@/types";
 import fetch from "@/utils/fetch";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 type Errors = {
   msg: string | undefined;
@@ -22,6 +23,7 @@ function Login() {
   const errors = useActionData() as Errors;
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const queryClient = useQueryClient();
 
   const loginTestUser = async () => {
     try {
@@ -33,6 +35,7 @@ function Login() {
         title: "Success",
         description: "You have been logged in",
       });
+      queryClient.invalidateQueries([QueryKeys.USER]);
       navigate("/dashboard", { replace: true });
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,27 +83,30 @@ function Login() {
   );
 }
 
-export const action = async ({ request }: { request: Request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData.entries());
-  const errors = { msg: "" };
-  if (data.password.length < 3) {
-    errors.msg = "Password must be at least 3 characters long";
-    return errors;
-  }
-  try {
-    await fetch.post("/auth/login", data);
-    toast({
-      title: "Success",
-      description: "You have been logged in",
-    });
-    return redirect("/dashboard");
-  } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const err = error as any;
-    errors.msg = err.response.data.msg;
-    return errors;
-  }
-};
+export const action =
+  (queryClient: QueryClient) =>
+  async ({ request }: { request: Request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData.entries());
+    const errors = { msg: "" };
+    if (data.password.length < 3) {
+      errors.msg = "Password must be at least 3 characters long";
+      return errors;
+    }
+    try {
+      await fetch.post("/auth/login", data);
+      toast({
+        title: "Success",
+        description: "You have been logged in",
+      });
+      queryClient.invalidateQueries([QueryKeys.USER]);
+      return redirect("/dashboard");
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const err = error as any;
+      errors.msg = err.response.data.msg;
+      return errors;
+    }
+  };
 
 export default Login;

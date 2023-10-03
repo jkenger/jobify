@@ -1,4 +1,6 @@
-import { IJobs, ILoader } from "@/types";
+import { CatchError, IJobs, ILoader, QueryKeys } from "@/types";
+import fetch from "@/utils/fetch";
+import { AxiosResponse } from "axios";
 import { createContext, useContext } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 
@@ -10,15 +12,74 @@ type TAllJobsContext = {
   searchParams: URLSearchParams;
   setSearchParams: React.Dispatch<React.SetStateAction<URLSearchParams>>;
   onSetParams: (name: string, value: Array<string | number>) => void;
-  data: ILoader<IJobs>;
+  queryParams: string;
 };
 
 const AllJobsContext = createContext<TAllJobsContext | null>(null);
 
+const allJobsQuery = (queryParams: string) => {
+  return {
+    queryKey: [QueryKeys.JOBS, queryParams],
+    queryFn: async () => {
+      try {
+        return await fetch.get(`/jobs${queryParams}`);
+      } catch (error) {
+        const err = error as CatchError;
+        return err.response.data.msg;
+      }
+    },
+    keepPreviousData: true,
+  };
+};
+
+const singleJobQuery = (id: string) => {
+  return {
+    queryKey: [QueryKeys.JOB, id],
+    queryFn: async () => {
+      try {
+        return await fetch.get(`/jobs/${id}`);
+      } catch (error) {
+        const err = error as CatchError;
+        return err.response.data.msg;
+      }
+    },
+  };
+};
+
+const statsQuery = () => {
+  return {
+    queryKey: [QueryKeys.STATS],
+    queryFn: async () => {
+      try {
+        return (await fetch.get(`/jobs/stats`)) as AxiosResponse<
+          ILoader<IJobs>
+        >;
+      } catch (error) {
+        const err = error as CatchError;
+        return err.response.data.msg;
+      }
+    },
+  };
+};
+
+const adminQuery = () => {
+  return {
+    queryKey: [QueryKeys.ADMIN],
+    queryFn: async () => {
+      try {
+        return await fetch.get("/users/admin/app-stats");
+      } catch (error) {
+        const err = error as CatchError;
+        return err.response.data.msg;
+      }
+    },
+  };
+};
+
 function AllJobsProvider({ children }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const data = useLoaderData() as ILoader<IJobs>;
+  const { queryParams } = useLoaderData() as { queryParams: string };
   function onSetParams(name: string, value: Array<string | number>) {
     searchParams.set(name, value.join(","));
     if (value.length === 0) searchParams.delete(name);
@@ -26,7 +87,7 @@ function AllJobsProvider({ children }: Props) {
   }
   const value = {
     searchParams,
-    data,
+    queryParams,
     setSearchParams,
     onSetParams,
   };
@@ -44,4 +105,11 @@ function useAllJobs() {
   return context;
 }
 
-export { AllJobsProvider, useAllJobs };
+export {
+  AllJobsProvider,
+  useAllJobs,
+  allJobsQuery,
+  singleJobQuery,
+  statsQuery,
+  adminQuery,
+};

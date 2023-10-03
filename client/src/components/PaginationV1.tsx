@@ -1,12 +1,15 @@
-import { useAllJobs } from "@/context/AllJobsProvider";
+import { allJobsQuery, useAllJobs } from "@/context/AllJobsProvider";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { Button } from "./ui/button";
+import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 
 function Pagination() {
-  const { data, onSetParams } = useAllJobs();
-  const {
-    message: { currentPage, numOfPages, totalJobs },
-  } = data.data;
+  const { queryParams, onSetParams } = useAllJobs();
+  const { data } = useQuery(
+    allJobsQuery(queryParams)
+  ) as UseQueryResult<AxiosResponse>;
+  const { currentPage, numOfPages, totalJobs } = data?.data.message || {};
   const pages = Array.from({ length: numOfPages }, (_, i) => i + 1);
   function handlePageChange(page: number) {
     onSetParams("page", [page]);

@@ -3,7 +3,28 @@ import { Description, Heading, Separator, SpaceRow } from "@/components/ui";
 import { JobContainer, FilterContainer } from "@/components";
 
 import { AllJobsProvider } from "@/context/AllJobsProvider";
-import fetch from "@/utils/fetch";
+
+import { allJobsQuery } from "@/context/AllJobsProvider";
+
+import { QueryClient } from "@tanstack/react-query";
+
+import { CatchError } from "@/types";
+
+export const loader =
+  (queryClient: QueryClient) =>
+  async ({ request }: { request: Request }) => {
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ]);
+    const queryParams = `?${new URLSearchParams(params).toString()}`;
+    try {
+      await queryClient.ensureQueryData(allJobsQuery(queryParams));
+      return { params, queryParams };
+    } catch (error) {
+      const err = error as CatchError;
+      return err.response.data.msg;
+    }
+  };
 
 function AllJobs() {
   return (
@@ -27,18 +48,5 @@ function AllJobs() {
     </AllJobsProvider>
   );
 }
-
-export const loader = async ({ request }: { request: Request }) => {
-  const params = Object.fromEntries([
-    ...new URL(request.url).searchParams.entries(),
-  ]);
-  const queryParams = `?${new URLSearchParams(params).toString()}`;
-  try {
-    const data = await fetch.get("/jobs" + queryParams);
-    return data;
-  } catch (error) {
-    return error;
-  }
-};
 
 export default AllJobs;

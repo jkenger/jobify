@@ -1,13 +1,16 @@
-import { useAllJobs } from "@/context/AllJobsProvider";
+import { allJobsQuery, useAllJobs } from "@/context/AllJobsProvider";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { Button } from "./ui/button";
+import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 
 function Pagination() {
-  const { data, onSetParams } = useAllJobs();
-  const {
-    message: { currentPage, limit, numOfPages, totalJobs },
-  } = data.data;
-
+  const { onSetParams, queryParams } = useAllJobs();
+  const { data } = useQuery(
+    allJobsQuery(queryParams)
+  ) as UseQueryResult<AxiosResponse>;
+  const { currentPage, limit, numOfPages, totalJobs } =
+    data?.data.message || {};
   function handlePageChange(page: number) {
     onSetParams("page", [page]);
   }
@@ -80,7 +83,7 @@ function Pagination() {
   }
 
   const firstPageLimit = limit * (currentPage - 1) + 1;
-  const lastPageLimit = limit * currentPage;
+  const lastPageLimit = totalJobs > limit ? limit * currentPage : totalJobs;
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">

@@ -1,26 +1,29 @@
 import StatCard from "@/components/StatCard";
 import StatsContainer from "@/components/StatsContainer";
 import { Description, Heading, SpaceRow, toast } from "@/components/ui";
-import { IAdminLoader, Links } from "@/types";
-import fetch from "@/utils/fetch";
-import { redirect, useLoaderData } from "react-router-dom";
+import { adminQuery } from "@/context/AllJobsProvider";
+import { CatchError, IAdminLoader, Links } from "@/types";
 
-export async function loader() {
+import { QueryClient, UseQueryResult, useQuery } from "@tanstack/react-query";
+import { redirect } from "react-router-dom";
+
+export const loader = (queryCLient: QueryClient) => async () => {
   try {
-    const response = await fetch.get("/users/admin/app-stats");
-
-    return response.data.message;
+    return await queryCLient.ensureQueryData(adminQuery());
   } catch (error) {
+    const err = error as CatchError;
     toast({
-      title: "Error 401",
-      description: "You are not authorized to view this page",
+      title: "Error",
+      description: err.response.data.msg,
     });
     return redirect(Links.DASHBOARD);
   }
-}
+};
 
 function Admin() {
-  const { users, jobs } = useLoaderData() as IAdminLoader;
+  const data = useQuery(adminQuery()) as UseQueryResult<IAdminLoader>;
+  const jobs = data?.data?.jobs;
+  const users = data?.data?.users;
   return (
     <div className="space-y-4">
       <SpaceRow>
