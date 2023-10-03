@@ -38,14 +38,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello World", teste: "teste" });
-});
-
-app.get("/api/v1/test", (req, res) => {
-  res.json({ message: "Hello World", teste: "teste" });
-});
-
 // Router
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);
