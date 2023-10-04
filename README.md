@@ -1,4 +1,4 @@
-![Banner](https://github.com/jkenger/jobify/blob/main/public/images/banner.png?raw=true)
+![Banner](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/banner.png?raw=true)
 
 # Jobify: Personal Job Tracker
 
@@ -7,35 +7,35 @@
 Jobify is your all-in-one solution for simplifying and optimizing your job search process. Whether you're a job seeker looking for new opportunities or an employer managing applications, Jobify provides the tools you need to make the process effortless.
 
 ## Live Demo
-To access the app, visit [Jobify: Personal Job Tracker](https://www.jobify-app.com).
+To access the app, visit [Jobify: Personal Job Tracker](https://jobify-rl4k.onrender.com/).
 
 ## Key Features
 
-![User Authentication](https://github.com/jkenger/jobify/blob/main/public/images/login.png?raw=true)
+![User Authentication](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/login.png?raw=true)
 - **User Authentication:** Secure login and registration functionality for user accounts.
 
 
-![Admin Dashboard](https://github.com/jkenger/jobify/blob/main/public/images/admindas.png?raw=true)
+![Admin Dashboard](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/admindas.png?raw=true)
 - **Admin Dashboard:** Exclusive admin access to a real-time dashboard that tracks the total number of users and job listings.
 
 
-![Effortless Job Management](https://raw.githubusercontent.com/jkenger/jobify/main/public/images/add.png)
+![Effortless Job Management](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/add.png?raw=true)
 - **Effortless Job Management:** Easily add, edit, and organize job applications. Include essential details like job position, company, location, status (pending, interview, or rejected), and job type (full-time, part-time, or internship).
 
 
-![Job Listings](https://github.com/jkenger/jobify/blob/main/public/images/AllJobs.png?raw=true)
+![Job Listings](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/AllJobs.png?raw=true)
 - **Job Listings:** Conveniently view and manage job applications, categorized by status and type.
 
 
-![Data Analytics](https://github.com/jkenger/jobify/blob/main/public/images/Stats.png?raw=true)
+![Data Analytics](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/Stats.png?raw=true)
 - **Data Analytics:** Gain insights into your job search progress with a comprehensive statistics page. Monitor pending applications, scheduled interviews, and job declines. Visualize historical data with bar and area charts to track monthly applications.
 
 
-![Profile Customization](https://github.com/jkenger/jobify/blob/main/public/images/updateprofile.png?raw=true)
+![Profile Customization](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/updateprofile.png?raw=true)
 - **Profile Customization:** Personalize user and admin profiles by adding images and additional information.
 
 
-![Admin Privileges](https://github.com/jkenger/jobify/blob/main/public/images/admipriv.png?raw=true)
+![Admin Privileges](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/admipriv.png?raw=true)
 - **Admin Privileges:** Ensure exclusive admin privileges with a single admin account for streamlined control and management.
 
 ## Getting Started
