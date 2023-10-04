@@ -36,6 +36,7 @@ function Login() {
         description: "You have been logged in",
       });
       queryClient.invalidateQueries([QueryKeys.USER]);
+      queryClient.invalidateQueries([QueryKeys.JOBS]);
       navigate("/dashboard", { replace: true });
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,6 +101,8 @@ export const action =
         description: "You have been logged in",
       });
       queryClient.invalidateQueries([QueryKeys.USER]);
+      queryClient.invalidateQueries([QueryKeys.JOBS]);
+
       return redirect("/dashboard");
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

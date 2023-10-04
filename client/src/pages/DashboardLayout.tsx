@@ -1,6 +1,6 @@
 import Wrapper from "@/components/wrappers/Dashboard";
 import Navbar from "@/components/Navbar";
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { Outlet, redirect, useNavigate } from "react-router-dom";
 import { BigSidebar, SmallSidebar } from "@/components";
 import {
@@ -48,7 +48,7 @@ function DashboardLayout() {
   const navigate = useNavigate();
 
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const [isAuth, setIsAuth] = useState(true);
   function toggleSidebar() {
     setShowSidebar(!showSidebar);
   }
@@ -61,6 +61,23 @@ function DashboardLayout() {
       description: "You have been logged out successfully",
     });
   }
+
+  fetch.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error?.response?.status === 401) {
+        setIsAuth(false);
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  useEffect(() => {
+    if (isAuth) return;
+    logoutUser();
+  }, [isAuth]);
 
   const value = {
     user,
