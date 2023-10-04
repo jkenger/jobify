@@ -23,7 +23,7 @@ To access the app, visit [Jobify: Personal Job Tracker](https://jobify-rl4k.onre
 - **Effortless Job Management:** Easily add, edit, and organize job applications. Include essential details like job position, company, location, status (pending, interview, or rejected), and job type (full-time, part-time, or internship).
 
 
-![Job Listings](https://github.com/jkenger/jobify/blob/main/public/images/AllJobs.png?raw=true)
+![Job Listings](https://github.com/jkenger/jobify/blob/main/client/src/assets/images/AllJobs.png?raw=true)
 - **Job Listings:** Conveniently view and manage job applications, categorized by status and type.
 
 
