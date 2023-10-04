@@ -7,7 +7,7 @@
 Jobify is your all-in-one solution for simplifying and optimizing your job search process. Whether you're a job seeker looking for new opportunities or an employer managing applications, Jobify provides the tools you need to make the process effortless.
 
 ## Live Demo
-To access the app, visit [Jobify: Personal Job Tracker](https://www.jobify-app.com).
+To access the app, visit [Jobify: Personal Job Tracker](https://jobify-rl4k.onrender.com/).
 
 ## Key Features
 
